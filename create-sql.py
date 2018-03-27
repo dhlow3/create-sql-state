@@ -1,10 +1,8 @@
 # coding: utf-8
 """Make create table statement from data file."""
 import argparse
-
 from collections import OrderedDict
 from csv import DictReader
-from math import ceil
 from os import path
 
 
@@ -36,8 +34,8 @@ def get_args():
                         dest='eg',
                         type=bool,
                         default=False,
-                        help=('show example data as comments in SQL statement'
-                              ' (default: False)'))
+                        help=('True to show example data as comments in SQL '
+                              'statement (default: False)'))
 
     parser_args = parser.parse_args()
 
@@ -51,10 +49,20 @@ def get_args():
     return args
 
 
-def main():
-    """Do main stuff."""
-    args = get_args()
+def parse_file(args):
+    """Parse a delimited data file.
 
+    Parameters
+    ----------
+    args: dict
+        File path and options for parsing the data file.
+
+    Returns
+    -------
+    sql: str
+        Create table sql statement.
+
+    """
     with open(args['data_file']) as data_file:
         currentline = 0
 
@@ -86,25 +94,24 @@ def main():
             cols = (cols +
                     '{}{}NVARCHAR({}),\t-- eg. {}\n'
                     .format(_,
-                            '\t' * ceil(ceil(max_key_len/4)-(len(_)/4)),
+                            ' ' * (max_key_len - len(_) + 8),
                             attr[_]['len'],
                             attr[_]['ex']))
 
-            query = "CREATE TABLE []\n(\n{});\n".format(cols)
+            sql = "CREATE TABLE []\n(\n{});\n".format(cols)
         else:
             cols = (cols +
                     '{}{}NVARCHAR({}),\n'
                     .format(_,
-                            '\t' * ceil(ceil(max_key_len/4)-(len(_)/4)),
+                            ' ' * (max_key_len - len(_) + 8),
                             attr[_]['len']))
 
-            query = "CREATE TABLE []\n(\n{});\n".format(cols)
+            sql = "CREATE TABLE []\n(\n{});\n".format(cols)
 
-    dst = path.join(path.dirname(__file__), 'create_table.txt')
-
-    with open(dst, 'w') as f:
-        f.write(query)
+    return sql
 
 
 if __name__ == '__main__':
-    main()
+    args = get_args()
+    sql = parse_file(args=args)
+    print(sql)
