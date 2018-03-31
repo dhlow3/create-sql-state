@@ -28,20 +28,20 @@ def get_args():
     parser.add_argument('-sep',
                         dest='sep',
                         default='\t',
-                        help='separator/delimiter (default: \\t)')
+                        help='delimiter (default: \\t)')
 
     parser.add_argument('-eg',
                         dest='eg',
-                        type=bool,
+                        action='store_true',
                         default=False,
-                        help=('True to show example data as comments in SQL '
-                              'statement (default: False)'))
+                        help=('show example data as comments in SQL '
+                              'statement'))
 
     parser_args = parser.parse_args()
 
     args = dict(data_file=parser_args.data_file,
                 n=parser_args.n,
-                sep=parser_args.sep,
+                sep=str(parser_args.sep),
                 eg=parser_args.eg)
 
     assert path.exists(args['data_file'])
