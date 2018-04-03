@@ -41,7 +41,7 @@ def get_args():
 
     args = dict(data_file=parser_args.data_file,
                 n=parser_args.n,
-                sep=str(parser_args.sep),
+                sep=parser_args.sep,
                 eg=parser_args.eg)
 
     assert path.exists(args['data_file'])
