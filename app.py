@@ -78,8 +78,13 @@ if __name__ == '__main__':
             # If no error messages, output results to sub-window
             app.startSubWindow('output', modal=True)
 
-            # Do file parsing
-            text = parse_file(parse_args)
+            try:
+                # Do file parsing
+                text = parse_file(parse_args)
+            except Exception as e:
+                app.stop()
+                raise
+
             app.addLabel('result')
             app.setLabel('result', text)
 

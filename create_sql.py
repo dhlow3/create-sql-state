@@ -71,20 +71,27 @@ def parse_file(args):
 
         attr = OrderedDict()
 
-        for row in reader:
-            currentline += 1
-            if args['n']:
-                if currentline > args['n']:
-                    break
+        try:
+            for row in reader:
+                currentline += 1
+                if args['n']:
+                    if currentline > args['n']:
+                        break
 
-            for i in header:
-                val = row[i]
+                for name in header:
+                    val = row[name]
 
-                if currentline == 1:
-                    attr[i] = {'ex': val, 'len': len(val)}
+                    if currentline == 1:
+                        attr[name] = {'ex': val, 'len': len(val)}
 
-                if len(val) > attr[i]['len']:
-                    attr[i] = {'ex': attr[i]['ex'], 'len': len(val)}
+                    if len(val) > attr[name]['len']:
+                        attr[name] = {'ex': attr[name]['ex'], 'len': len(val)}
+
+        except UnicodeDecodeError as e:
+            # Highlight location of UnicodeDecodeError in exception message
+            print('UnicodeDecodeError AT LINE {} OF DATA FILE'.format(
+                currentline))
+            raise
 
     cols = ''
     max_key_len = max(map(len, attr))  # for pretty spacing in SQL statement
