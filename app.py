@@ -31,7 +31,7 @@ if __name__ == '__main__':
     def back():
         """Exit output window and return to main app."""
         app.topLevel.clipboard_clear()
-        app.destroySubWindow("output")
+        app.destroySubWindow("Output")
         app.show()
 
     def reset():
@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
         if not invalid:
             # If no error messages, output results to sub-window
-            app.startSubWindow('output', modal=True)
+            app.startSubWindow('Output', modal=True)
 
             try:
                 # Do file parsing
@@ -92,7 +92,7 @@ if __name__ == '__main__':
                            [back, copy_text(text), exit])
 
             app.stopSubWindow()
-            app.go(startWindow='output')
+            app.go(startWindow='Output')
 
     app.addButtons(['Process', 'Reset', 'Exit'], [process, reset, exit])
 
